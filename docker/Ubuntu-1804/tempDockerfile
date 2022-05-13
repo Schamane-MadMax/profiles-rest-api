@@ -2,11 +2,22 @@ FROM ubuntu:18.04
 
 RUN apt-get update && \
     apt-get install -y python3-venv zip && \
+    apt install -y python3-pip virtualenv && \
     apt-get clean && \
     touch ~/.bash_aliases && \
     if ! grep -q PYTHON_ALIAS_ADDED ~/.bash_aliases; then echo "# PYTHON_ALIAS_ADDED" >> ~/.bash_aliases && echo "alias python='python3'" >> ~/.bash_aliases; fi &&\
-    mkdir -p $internalPath
+    if [[ ! -d "$internalPath" ]] ;then mkdir -p $internalPath;fi
+
+ENV VIRTUAL_ENV=/root/env
+RUN python3 -m venv /root/env
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN echo "source /root/env/bin/activate" >> ~/.bashrc
+
+# RUN pip install -r requirements.txt
+
+## Install dependencies:
+#COPY requirements.txt .
+#RUN pip install -r requirements.txt
 
 EXPOSE 6379
-
 #CMD ["redis-server", "--protected-mode no"]
