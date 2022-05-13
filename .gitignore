@@ -8,9 +8,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Docker builds
-docker
-
 # C extensions
 *.so
 
