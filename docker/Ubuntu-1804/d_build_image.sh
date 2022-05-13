@@ -1,19 +1,22 @@
 #!/bin/bash
 projectName="django-rest-api"
 projectPath="/mnt/c/Users/mhent/Courses/$projectName"
+export internalPath="/opt/courses/$projectName"
+mkdir -p $projectPath
 
 envsubst < ./tempDockerfile > ./Dockerfile
 
-conName="cont_$projectName"
+conName="con_$projectName"
 imgName="img_$projectName"
 volName="vol_$projectName"
 
-docker stop $contName
-docker rm $contName
+docker stop $contName >/dev/null 2>&1
+docker rm $contName >/dev/null 2>&1
 
-docker build -t $imgName
+echo "docker build -t $imgName"
+docker build -t $imgName .
 docker volume create $volName
-docker run -itd --name $conName --rm --mount type=bind,source=$projectPath,target=/opt/course/$projectName $imgName
+docker run -itd --name $conName --rm --mount type=bind,source=$projectPath,target=$internalPath $imgName
 docker attach $conName
 
 
