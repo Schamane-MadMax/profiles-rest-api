@@ -11,7 +11,7 @@ class UserProfileManager(BaseUserManager):
         if not email:
             raise ValueError('User must have an email address')
         email = self.normalize_email(email)
-        user = self.model(email=email, name=name)
+        user = self.model(email=email, name=name,)
 
         user.set_password(password)
         user.save(using=self._db)
@@ -20,7 +20,7 @@ class UserProfileManager(BaseUserManager):
 
     def create_superuser(self, email, name, password):
         """ Create and save a new superuser with given details"""
-        user = self.create_user(email,name, password)
+        user = self.create_user(email, name, password)
 
         user.is_superuser = True
         user.is_staff = True
@@ -31,7 +31,9 @@ class UserProfileManager(BaseUserManager):
 
 
 class UserProfile(AbstractBaseUser,PermissionsMixin):
+    #the Name UserProfle will shown as User profiles in the django admin site as seperate section
     """Databases model for user in the system"""
+
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     is_activ = models.BooleanField(default=True)
@@ -40,7 +42,7 @@ class UserProfile(AbstractBaseUser,PermissionsMixin):
     objects = UserProfileManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FILEDS = ['name']
+    REQUIRED_FIELDS = ['name']
 
     def get_full_name(self):
         """Retrieve full name of user """

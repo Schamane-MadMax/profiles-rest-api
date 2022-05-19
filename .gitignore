@@ -2,6 +2,7 @@
 # Created by https://www.gitignore.io/api/python,vagrant
 # Edit at https://www.gitignore.io/?templates=python,vagrant
 d_build_image.sz~
+*~
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
