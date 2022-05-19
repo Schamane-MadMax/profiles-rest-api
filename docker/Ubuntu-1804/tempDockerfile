@@ -8,16 +8,17 @@ RUN apt-get update && \
     if ! grep -q PYTHON_ALIAS_ADDED ~/.bash_aliases; then echo "# PYTHON_ALIAS_ADDED" >> ~/.bash_aliases && echo "alias python='python3'" >> ~/.bash_aliases; fi &&\
     if [[ ! -d "$internalPath" ]] ;then mkdir -p $internalPath;fi
 
+COPY requirements.txt /tmp/.
+RUN pip3 install -r /tmp/requirements.txt
+
 ENV VIRTUAL_ENV=/root/env
 RUN python3 -m venv /root/env
+RUN echo "source /root/env/bin/activate" >> ~/.bashrc 
+RUN echo "cd $internalPath" >> ~/.bashrc 
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-RUN echo "source /root/env/bin/activate" >> ~/.bashrc
+RUN echo "export PYTHONPATH=/usr/local/lib/python3.6/dist-packages" >> ~/.bashrc
+#initialising djang project RUN echo "cd $internalPath;django-admin.py startproject profiles_project ." >> ~/.bashrc 
 
-# RUN pip install -r requirements.txt
-
-## Install dependencies:
-#COPY requirements.txt .
-#RUN pip install -r requirements.txt
-
-EXPOSE 6379
+EXPOSE 8000
 #CMD ["redis-server", "--protected-mode no"]
+#CMD ["cd", "$internalPath"]
